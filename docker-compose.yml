@@ -1,0 +1,32 @@
+version: "3.7"
+services:
+
+  db:
+    image: "postgres:14.1-alpine"
+    container_name: "db-streamlit"
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_DB=${POSTGRES_DB:-testdb}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-admin}
+
+  streamlit:
+    build:
+      context: app
+    container_name: "streamlit"
+    volumes:
+      - ./app:/app
+    ports:
+      - "80:8501"
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-testdb}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-admin}
+
+volumes:
+  db_data:

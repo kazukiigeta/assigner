@@ -1,0 +1,4 @@
+streamlit==1.5.1
+psycopg2-binary==2.9.3
+xpress==8.13.3
+SQLAlchemy==1.4.31
